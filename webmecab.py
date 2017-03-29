@@ -3,9 +3,10 @@ import falcon
 import MeCab
 
 class MecabResource(object):
-  def on_get(self, req, resp):
-    msg={"message": "hello, falcon"}
-    resp.body = json.dumps(msg)
+  def on_post(self, req, resp):
+    body = req.stream.read().decode('utf-8')
+    tagger = MeCab.Tagger()
+    resp.body = tagger.parse(body)
 
 app = falcon.API()
 app.add_route("/", MecabResource())
